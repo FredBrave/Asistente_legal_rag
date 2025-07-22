@@ -1,4 +1,19 @@
+# Core del servidor
 fastapi>=0.110.0
 uvicorn[standard]>=0.29.0
+
+# Entorno Virtual
+python-dotenv
+
+# RAG / LangChain
 langchain>=0.1.17,<0.2.0
+faiss-cpu
+sentence-transformers
+pypdf
 requests>=2.31.0
+
+# Modelos y conectores
+openai
+
+# Bot de Telegram 
+python-telegram-bot==20.7
