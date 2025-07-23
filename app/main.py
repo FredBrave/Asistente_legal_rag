@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.telegram_bot import iniciar_bot
 import threading
 
 app = FastAPI()
