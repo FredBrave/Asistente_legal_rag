@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import List
 from fastapi import UploadFile
-from app.documents.utils import extraer_texto
+from app.documentos.utils import extraer_texto
 from app.rag_engine import actualizar_indice_con_texto
 
 DIRECTORIO_DOCUMENTOS = "data/documentos"

@@ -11,6 +11,6 @@ async def subir_documento(file: UploadFile = File(...)):
     procesar_documento(path)
     return {"mensaje": f"Documento {file.filename} cargado y procesado."}
 
-@router.get("/")
+@router.get("/listar")
 def ver_documentos():
     return listar_documentos()
