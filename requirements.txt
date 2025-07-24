@@ -6,6 +6,7 @@ uvicorn[standard]>=0.29.0
 python-dotenv
 
 # RAG / LangChain
+langchain
 langchain-community
 faiss-cpu
 sentence-transformers
@@ -18,3 +19,5 @@ openai
 # Bot de Telegram 
 python-telegram-bot==20.7
 
+#Lector PDFs
+PyPDF2==3.0.1

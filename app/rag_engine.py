@@ -2,12 +2,14 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.schema import Document
 from app.config import OPENROUTER_API_KEY, OPENROUTER_MODEL, VECTOR_PATH
+import os
 
-def cargar_qa_chain():
+embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+def cargar_qa_chain(embedding):
     try:
-        print("Cargando embeddings...")
-        embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
         print(f"Cargando índice desde: {VECTOR_PATH}")
         vectorstore = FAISS.load_local(
@@ -32,7 +34,7 @@ def cargar_qa_chain():
         print(f"Error al cargar la cadena QA: {e}")
         raise
 
-qa_chain = cargar_qa_chain()
+qa_chain = cargar_qa_chain(embedding)
 
 def responder_pregunta(pregunta: str) -> str:
     try:
@@ -43,3 +45,18 @@ def responder_pregunta(pregunta: str) -> str:
     except Exception as e:
         print(f"Error al responder: {e}")
         return "Hubo un error al procesar la pregunta."
+
+
+def actualizar_indice_con_texto(texto: str):
+    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+    chunks = splitter.split_text(texto)
+    docs = [Document(page_content=chunk) for chunk in chunks]
+
+    if os.path.exists(VECTOR_PATH):
+        db = FAISS.load_local(VECTOR_PATH, embedding, allow_dangerous_deserialization=True)
+        db.add_documents(docs)
+    else:
+        db = FAISS.from_documents(docs, embedding)
+    
+    db.save_local(VECTOR_PATH)
+    print("Índice actualizado correctamente.")
